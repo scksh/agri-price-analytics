@@ -1,0 +1,63 @@
+﻿계층,목표 테이블,필요한 컬럼,타입,논리 키,행 단위,컬럼 설명,원본 컬럼,원천 및 오퍼레이션,변환 로직 / 생성 방법,검증 상태
+Silver,ref_market,market_code,VARCHAR,PK,공식 시장코드,시장 식별자,WHSALCD,Grid_20240625000000000653_1 (S1),문자형; 선행 0 보존; C 시장 목록과 대조,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_market,market_name,VARCHAR,,공식 시장코드,시장 표시명,WHSALNAME,Grid_20240625000000000653_1 (S1),TRIM; 공식 코드표의 표준 명칭과 대조,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,series_key,VARCHAR,PK,품목·품종·등급·거래규격 조합,동일 가격 비교 시계열 식별자,"LARGE,MID,SMALL,LVCD,DANCD,DANQ,POJCD,SIZECD",Grid_20240625000000000653_1 (S1),정규화한 코드와 DECIMAL 단량을 길이 구분하여 직렬화 후 SHA256; NULL과 미상 구분,파생 정의; 실제 원천 검증 전
+Silver,ref_series,item_key,VARCHAR,,품목·품종·등급·거래규격 조합,품목 중분류 복합키,"LARGE,MID",Grid_20240625000000000653_1 (S1),대분류:중분류; 공식 농산물 분류만 채택,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,item_name,VARCHAR,,품목·품종·등급·거래규격 조합,품목명,MIDNAME,Grid_20240625000000000653_1 (S1),코드표 대조; 명칭으로 조인하지 않음,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,variety_key,VARCHAR,,품목·품종·등급·거래규격 조합,품종 복합키,"LARGE,MID,SMALL",Grid_20240625000000000653_1 (S1),대:중:소; 코드 변경은 새 버전 또는 승인 교차표,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,variety_name,VARCHAR,,품목·품종·등급·거래규격 조합,품종명,SMALLNAME,Grid_20240625000000000653_1 (S1),공식 코드표 대조,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,grade_code,VARCHAR,,품목·품종·등급·거래규격 조합,등급코드,LVCD,Grid_20240625000000000653_1 (S1),문자형,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,grade_name,VARCHAR,,품목·품종·등급·거래규격 조합,등급 표시명,LVNAME,Grid_20240625000000000653_1 (S1),공식 코드표 대조,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,unit_code,VARCHAR,,품목·품종·등급·거래규격 조합,단위코드,DANCD,Grid_20240625000000000653_1 (S1),문자형; 단위 의미는 검증 규칙 파일에서 관리,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,unit_qty,"DECIMAL(16,4)",,품목·품종·등급·거래규격 조합,거래 규격 단량,DANQ,Grid_20240625000000000653_1 (S1),양수 숫자 파싱; 단위 환산 검증,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,pack_code,VARCHAR,,품목·품종·등급·거래규격 조합,포장코드,POJCD,Grid_20240625000000000653_1 (S1),문자형,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,size_code,VARCHAR,,품목·품종·등급·거래규격 조합,크기코드,SIZECD,Grid_20240625000000000653_1 (S1),문자형,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,spec_label,VARCHAR,,품목·품종·등급·거래규격 조합,규격 표시,STD,Grid_20240625000000000653_1 (S1),원천 표기 보존; 코드 일치 여부 검증,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_series,is_reference,BOOLEAN,,품목·품종·등급·거래규격 조합,품목 대표 규격 여부,검증된 거래중량 및 기준기간,배치 설정,기준 학습 기간의 완전성·거래중량으로 선정; 품목당 하나; 판본 고정,파생 정의; 실제 원천 검증 전
+Silver,ref_origin,origin_code,VARCHAR,PK,출하지 코드; 판본별 최대 한 대표 관측소,출하지 코드,SANCD,Grid_20240625000000000653_1 (S1),문자형; 미상 전용 코드; 국내·국외 분리 검증,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_origin,origin_name,VARCHAR,,출하지 코드; 판본별 최대 한 대표 관측소,출하지 표시명,SANNAME,Grid_20240625000000000653_1 (S1),공식 기준정보 대조,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,ref_origin,admin_code,VARCHAR,,출하지 코드; 판본별 최대 한 대표 관측소,국내 행정구역 식별자,출하지 코드표/공식 행정구역 매핑,aT 표준코드 및 검증 기준정보 (C),국외·미상은 NULL,설계; 실제 기준정보 검증 전
+Silver,ref_origin,station_id,VARCHAR,FK*,출하지 코드; 판본별 최대 한 대표 관측소,대표 ASOS 지점,공식 지점표 및 승인 매핑,aT 표준코드 및 검증 기준정보 (C),지리·고도·운영기간 확인; 부적합이면 NULL,설계; 실제 기준정보 검증 전
+Silver,ref_origin,match_method,VARCHAR,,출하지 코드; 판본별 최대 한 대표 관측소,매핑 품질 구분,검토 기록,aT 표준코드 및 검증 기준정보 (C),exact_region / reviewed_proxy / unmapped; 근거는 버전 파일에 기록,설계; 실제 기준정보 검증 전
+Silver,ref_hs,item_key,VARCHAR,PK*,품목 × HS 코드 × 적용 시작연도,품목 복합키,"LARGE,MID",Grid_20240625000000000653_1 (S1),ref_series.item_key 도메인,설계; 실제 기준정보 검증 전
+Silver,ref_hs,hs_code,VARCHAR,PK*,품목 × HS 코드 × 적용 시작연도,관세청 코드,공식 HS 분류표,aT 표준코드 및 검증 기준정보 (C),세부 코드 우선; 상하위 중복 금지,설계; 실제 기준정보 검증 전
+Silver,ref_hs,relation,VARCHAR,,품목 × HS 코드 × 적용 시작연도,직접 대응 또는 가공품 참고,검토 기록,aT 표준코드 및 검증 기준정보 (C),direct / related; ambiguous 제외; 동일 direct 코드를 품목 간 중복 합산하지 않음,설계; 실제 기준정보 검증 전
+Silver,ref_hs,valid_from_year,INTEGER,PK*,품목 × HS 코드 × 적용 시작연도,시작 연도,HS 개정 이력,aT 표준코드 및 검증 기준정보 (C),적용 첫 연도,설계; 실제 기준정보 검증 전
+Silver,ref_hs,valid_to_year,INTEGER,,품목 × HS 코드 × 적용 시작연도,종료 연도(포함),HS 개정 이력,aT 표준코드 및 검증 기준정보 (C),NULL은 유효; 기간 겹침 금지,설계; 실제 기준정보 검증 전
+Silver,fact_market_day,trade_date,DATE,PK*,정산일 × 시장 × 동일 규격 × 출하지,정산일,SALEDATE,Grid_20240625000000000653_1 (S1),YYYYMMDD → DATE; 거래 발생일과 같다고 단정하지 않음,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,fact_market_day,market_code,VARCHAR,"PK*,FK",정산일 × 시장 × 동일 규격 × 출하지,시장,WHSALCD,Grid_20240625000000000653_1 (S1),ref_market 연결,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,fact_market_day,series_key,VARCHAR,"PK*,FK",정산일 × 시장 × 동일 규격 × 출하지,동일 규격,"LARGE,MID,SMALL,LVCD,DANCD,DANQ,POJCD,SIZECD",Grid_20240625000000000653_1 (S1),ref_series와 같은 해시,파생 정의; 실제 원천 검증 전
+Silver,fact_market_day,origin_code,VARCHAR,"PK*,FK",정산일 × 시장 × 동일 규격 × 출하지,출하지,SANCD,Grid_20240625000000000653_1 (S1),미상 코드 보존,공개 필드 확인; 실응답 및 의미 검증 전
+Silver,fact_market_day,amount_won,"DECIMAL(22,2)",,정산일 × 시장 × 동일 규격 × 출하지,유효 금액 전체,TOTAMT,Grid_20240625000000000653_1 (S1),SUM(검증된 양수 거래금액); 무효 금액은 격리,파생 정의; 실제 원천 검증 전
+Silver,fact_market_day,eligible_amount_won,"DECIMAL(22,2)",,정산일 × 시장 × 동일 규격 × 출하지,kg 환산 가능 금액,"TOTAMT,TOTQTY,DANQ,DANCD",Grid_20240625000000000653_1 (S1),kg 검증 통과 행의 금액 합; 분모와 동일 모집단,파생 정의; 실제 원천 검증 전
+Silver,fact_market_day,eligible_kg,"DECIMAL(22,4)",,정산일 × 시장 × 동일 규격 × 출하지,kg 환산 가능 중량,"TOTQTY,DANQ,DANCD",Grid_20240625000000000653_1 (S1),검증 규칙으로 kg 환산 후 SUM; 미확정 단위는 제외; 0은 가격 미산출,파생 정의; 실제 원천 검증 전
+Silver,fact_market_day,source_rows,BIGINT,,정산일 × 시장 × 동일 규격 × 출하지,합산한 원천행 수,원본 응답 행,Grid_20240625000000000653_1 (S1),완전한 시장일자 스냅샷 내 COUNT; 법인 포함 원천 grain 및 페이지 검증 후 집계,파생 정의; 실제 원천 검증 전
+Silver,fact_weather_day,obs_date,DATE,PK*,관측일 × 관측소 × 공개 판본,관측일,tm,getWthrDataList (W),DATE,공개 명세 및 후보 필드; 실응답 검증 전
+Silver,fact_weather_day,station_id,VARCHAR,PK*,관측일 × 관측소 × 공개 판본,ASOS 관측소,stnId,getWthrDataList (W),문자형; 공식 지점표 대조,공개 명세 및 후보 필드; 실응답 검증 전
+Silver,fact_weather_day,avg_temp_c,DOUBLE,,관측일 × 관측소 × 공개 판본,평균기온,avgTa,getWthrDataList (W),정상 수치만; 결측 NULL,공개 명세 및 후보 필드; 실응답 검증 전
+Silver,fact_weather_day,max_temp_c,DOUBLE,,관측일 × 관측소 × 공개 판본,최고기온,maxTa,getWthrDataList (W),정상 수치만,공개 명세 및 후보 필드; 실응답 검증 전
+Silver,fact_weather_day,min_temp_c,DOUBLE,,관측일 × 관측소 × 공개 판본,최저기온,minTa,getWthrDataList (W),정상 수치만,공개 명세 및 후보 필드; 실응답 검증 전
+Silver,fact_weather_day,rain_mm,DOUBLE,,관측일 × 관측소 × 공개 판본,일강수량,sumRn,getWthrDataList (W),무강수와 미관측 구분; 문서 규칙 적용,공개 명세 및 후보 필드; 실응답 검증 전
+Silver,fact_weather_day,available_at,TIMESTAMP,PK*,관측일 × 관측소 × 공개 판본,해당 판본을 알 수 있었던 시각,발표/수집 메타데이터,수집기,정확한 공개시각 없으면 최초 정상 수집시각; UTC 저장,파생 정의; 실제 원천 검증 전
+Silver,fact_trade_month,ref_month,DATE,PK*,통계월 × HS 코드 × 공개 판본,통계 기준월,year (후보),getItemtradeList (T),실제 YYYYMM 응답 확인; 월 첫날,공개 명세 및 후보 필드; 실응답 검증 전
+Silver,fact_trade_month,hs_code,VARCHAR,PK*,통계월 × HS 코드 × 공개 판본,HS 코드,hsCode (후보),getItemtradeList (T),"문자형; 요청 단위와 일치, 총계행 제외",공개 명세 및 후보 필드; 실응답 검증 전
+Silver,fact_trade_month,import_kg,"DECIMAL(22,4)",,통계월 × HS 코드 × 공개 판본,수입 순중량 kg,impWgt (후보),getItemtradeList (T),응답 단위 및 배율 검증; 0과 누락 구분,공개 명세 및 후보 필드; 실응답 검증 전
+Silver,fact_trade_month,export_kg,"DECIMAL(22,4)",,통계월 × HS 코드 × 공개 판본,수출 순중량 kg,expWgt (후보),getItemtradeList (T),응답 단위 및 배율 검증,공개 명세 및 후보 필드; 실응답 검증 전
+Silver,fact_trade_month,available_at,TIMESTAMP,PK*,통계월 × HS 코드 × 공개 판본,해당 통계 판본의 가용 시점,공표/수집 메타데이터,수집기,최초 확인 시각; 과거 최신 정정치에 가상 과거 공개일 부여 금지,파생 정의; 실제 원천 검증 전
+Gold,mart_weekly,week_start,DATE,PK*,완료 주 × 시장 또는 ALL × 동일 규격,월요일 기준 주,fact_market_day.trade_date,Athena,"date_trunc(week, trade_date); 완전한 주만",파생 정의; 실제 원천 검증 전
+Gold,mart_weekly,market_code,VARCHAR,PK*,완료 주 × 시장 또는 ALL × 동일 규격,시장 또는 전국 집계,fact_market_day.market_code,Athena,검증된 시장만; ALL은 별도 scope; 두 수준을 합산하지 않음,파생 정의; 실제 원천 검증 전
+Gold,mart_weekly,series_key,VARCHAR,"PK*,FK",완료 주 × 시장 또는 ALL × 동일 규격,가격 비교 규격,fact_market_day.series_key,Athena,같은 규격끼리 GROUP BY,파생 정의; 실제 원천 검증 전
+Gold,mart_weekly,amount_won,"DECIMAL(24,2)",,완료 주 × 시장 또는 ALL × 동일 규격,전체 검증 금액,fact_market_day.amount_won,Athena,SUM,파생 정의; 실제 원천 검증 전
+Gold,mart_weekly,eligible_amount_won,"DECIMAL(24,2)",,완료 주 × 시장 또는 ALL × 동일 규격,가격 산식 분자,fact_market_day.eligible_amount_won,Athena,SUM,파생 정의; 실제 원천 검증 전
+Gold,mart_weekly,eligible_kg,"DECIMAL(24,4)",,완료 주 × 시장 또는 ALL × 동일 규격,가격 산식 분모,fact_market_day.eligible_kg,Athena,SUM,파생 정의; 실제 원천 검증 전
+Gold ML,mart_forecast,as_of,TIMESTAMP,PK*,기준 주 × 목표 주 × 시장 × 규격 × 모델,예측 시점,실행 manifest,SageMaker,UTC; 데이터 판본 고정,파생 정의; 실제 원천 검증 전
+Gold ML,mart_forecast,target_week,DATE,PK*,기준 주 × 목표 주 × 시장 × 규격 × 모델,예측 대상 주,as_of와 완료주,SageMaker,최신 완료주 바로 다음 월~일 주; 이미 시작되었으면 주간 평균 전망으로 표시; 목표주 관측 금지,파생 정의; 실제 원천 검증 전
+Gold ML,mart_forecast,market_code,VARCHAR,PK*,기준 주 × 목표 주 × 시장 × 규격 × 모델,시장 범위,mart_weekly.market_code,SageMaker,공통 평가를 통과한 시계열만,파생 정의; 실제 원천 검증 전
+Gold ML,mart_forecast,series_key,VARCHAR,PK*,기준 주 × 목표 주 × 시장 × 규격 × 모델,가격 규격,mart_weekly.series_key,SageMaker,고정 대표 규격; 동일 대상 검증,파생 정의; 실제 원천 검증 전
+Gold ML,mart_forecast,model_id,VARCHAR,PK*,기준 주 × 목표 주 × 시장 × 규격 × 모델,모델/학습 데이터 판본 ID,모델 manifest,SageMaker,모델 아티팩트 ID,파생 정의; 실제 원천 검증 전
+Gold ML,mart_forecast,pred_price,DOUBLE,,기준 주 × 목표 주 × 시장 × 규격 × 모델,다음 주 원/kg 예측,모델 출력,SageMaker,양수 가격; 기준 모델 대비 검증 후 게시,파생 정의; 실제 원천 검증 전
+Gold ML,mart_forecast,lower80,DOUBLE,,기준 주 × 목표 주 × 시장 × 규격 × 모델,80% 예측구간 하한,과거 rolling 잔차,SageMaker,시간순 calibration; 검증 미달 NULL,파생 정의; 실제 원천 검증 전
+Gold ML,mart_forecast,upper80,DOUBLE,,기준 주 × 목표 주 × 시장 × 규격 × 모델,80% 예측구간 상한,과거 rolling 잔차,SageMaker,실제 포함률도 별도 모델 평가 보고서,파생 정의; 실제 원천 검증 전
+Silver 선택,fact_fuel_day,fuel_date,DATE,PK*,가격일 × 공개 판본; 전국 자동차용 경유만,가격 기준일,일자 (물리명 확인 필요),특정 7일 전국 일일 평균가격 (O),DATE; 현재가 API와 일자료 명세 분리,공개 명세 및 후보 필드; 실응답 검증 전
+Silver 선택,fact_fuel_day,price_won_l,DOUBLE,,가격일 × 공개 판본; 전국 자동차용 경유만,전국 경유 원/L,유종 및 평균가격 (물리명 확인 필요),특정 7일 전국 일일 평균가격 (O),자동차용 경유만 선택; 0/누락 제외,공개 명세 및 후보 필드; 실응답 검증 전
+Silver 선택,fact_fuel_day,available_at,TIMESTAMP,PK*,가격일 × 공개 판본; 전국 자동차용 경유만,해당 판본 가용 시점,수집 메타데이터,수집기,최초 정상 확인 시각; 이전 판본 보존,파생 정의; 실제 원천 검증 전

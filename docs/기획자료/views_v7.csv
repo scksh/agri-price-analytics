@@ -1,0 +1,8 @@
+﻿뷰/실행 산출물,행 단위,컬럼,컬럼 수,생성 규칙
+v_price_daily,거래일·시장 범위·규격,"trade_date, market_code, series_key, price_won_kg, eligible_kg, kg_amount_coverage",6,fact_market_day; 동일 규격; 전국 동일 범위
+v_price_weekly,완료 주·시장 범위·규격,"week_start, market_code, series_key, price_won_kg, eligible_kg, kg_amount_coverage, wow_price_pct, wow_volume_pct, season_median, robust_z, season_n, signal",12,"mart_weekly; 정확한 7일 간격 조인; 과거 같은 ISO주±2, 이전 연도만; 품질 gate"
+v_item_supply_weekly,완료 주·시장 범위·품목,"week_start, market_code, item_key, eligible_kg, kg_amount_coverage",5,품목 전체 규격의 금액 및 중량 합산; 대표 규격 가격과 분리
+v_origin_weekly,완료 주·시장 범위·규격·출하지,"week_start, market_code, series_key, origin_code, eligible_kg, share, prev_kg, delta_kg",8,fact_market_day; ALL 포함 scope 분리; 미상 비중 보존
+v_weather_weekly,완료 주·시장 범위·규격,"week_start, market_code, series_key, temp14, rain14, mean_station_max14, mean_station_min14, weather_coverage",8,출하지 주간 비중; 현재주 이전 4 완료주의 중량으로 고정 가중; 직전 14일 관측만; 매핑 및 관측 커버리지
+v_trade_month,기준월·품목·관계,"ref_month, item_key, relation, import_kg, export_kg, import_yoy_pct, available_at",7,"HS 유효기간 조인; 최신 as-of 판본, 합계 행 제거; 관계별 분리"
+v_ml_input,예측 기준주·시장 범위·규격,"as_of, target_week, market_code, series_key, lag_price, lag4_price, lag_volume, season_sin, season_cos, temp14, rain14, import_yoy_pct, fuel_won_l, target_price",14,학습 실행마다 immutable CSV/Parquet; target은 학습에만; 외부 그룹 gate; 가용 시점 검증; 유가/무역 누락 허용
